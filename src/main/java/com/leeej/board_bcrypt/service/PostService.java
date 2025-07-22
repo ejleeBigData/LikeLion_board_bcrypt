@@ -6,9 +6,7 @@ import com.leeej.board_bcrypt.model.Post;
 import com.leeej.board_bcrypt.model.User;
 import com.leeej.board_bcrypt.repository.PostRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,7 +31,7 @@ public class PostService {
 
     public PostResponseDto getById(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("해당 Post를 없음!!!!"));
+                .orElseThrow(() -> new NoSuchElementException("해당 Post를 찾을 수 없습니다."));
 
         return PostResponseDto.fromEntity(post);
     }
@@ -44,12 +42,36 @@ public class PostService {
         Post post = new Post();
         post.setAuthor(user);
         post.setTitle(dto.getTitle());
-        if( dto.getContent() != null && !dto.getContent().isBlank() ) post.setContent(dto.getContent());
+        if (dto.getContent() != null && !dto.getContent().isBlank()) post.setContent(dto.getContent());
 
         return PostResponseDto.fromEntity(postRepository.save(post));
     }
 
-    public void delete(Long id, PostRequestDto dto) {
+    public PostResponseDto update(Long id, PostRequestDto dto) {
+        User user = userService.login(dto.getUsername(), dto.getPassword());
+        PostResponseDto postResponseDto = getById(id);
 
+        if(!user.getUsername().equals(postResponseDto.getAuthor().getUsername())) {
+            throw new RuntimeException("다른 유저의 글은 수정할 수 없습니다.");
+        }
+
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("해당 Post를 찾을 수 없습니다."));
+        post.setAuthor(user);
+        post.setTitle(dto.getTitle());
+        if (dto.getContent() != null && !dto.getContent().isBlank()) post.setContent(dto.getContent());
+
+        return PostResponseDto.fromEntity(postRepository.save(post));
+    }
+
+    public void delete(Long id, PostDeleteRequestDto dto) {
+        User user = userService.login(dto.getUsername(), dto.getPassword());
+        PostResponseDto post = getById(id);
+
+        if(!user.getUsername().equals(post.getAuthor().getUsername())) {
+            throw new RuntimeException("다른 유저의 글은 삭제할 수 없습니다.");
+        }
+
+        postRepository.deleteById(id);
     }
 }
