@@ -28,13 +28,14 @@ public class UserService {
         return UserResponseDto.fromEntity(userRepository.save(user));
     }
 
-    public boolean login(String username, String rawPassword) {
+    public User login(String username, String rawPassword) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()-> new RuntimeException("없는 유저!"));
+
         if(!BCrypt.checkpw(rawPassword, user.getPasswordHash())) {
             throw new RuntimeException("비밀번호 다름!");
         }
 
-         return true;
+        return user;
     }
 }
