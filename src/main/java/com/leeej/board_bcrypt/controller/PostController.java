@@ -1,5 +1,6 @@
 package com.leeej.board_bcrypt.controller;
 
+import com.leeej.board_bcrypt.dto.PostDeleteRequestDto;
 import com.leeej.board_bcrypt.dto.PostRequestDto;
 import com.leeej.board_bcrypt.dto.PostResponseDto;
 import com.leeej.board_bcrypt.service.PostService;
