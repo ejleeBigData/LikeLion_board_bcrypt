@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
@@ -21,5 +21,4 @@ public class UserController {
     public UserResponseDto register(@Valid @RequestBody UserRequestDto dto) {
         return userService.register(dto);
     }
-
 }

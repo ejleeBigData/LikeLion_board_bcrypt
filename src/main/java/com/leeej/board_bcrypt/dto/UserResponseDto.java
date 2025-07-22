@@ -13,17 +13,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponseDto {
-    @NotNull
     private Long id;
 
-    @NotBlank
     private String username;
 
-   public static UserResponseDto fromEntity(User user) {
-       return new UserResponseDto(
-               user.getId(),
-               user.getUsername()
-       );
-   }
-
+    public static UserResponseDto fromEntity(User user) {
+        return new UserResponseDto(
+                user.getId(),
+                user.getUsername()
+        );
+    }
 }

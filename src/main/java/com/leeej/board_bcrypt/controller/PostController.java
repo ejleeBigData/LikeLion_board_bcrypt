@@ -1,8 +1,8 @@
 package com.leeej.board_bcrypt.controller;
 
-import com.leeej.board_bcrypt.dto.PostDeleteRequestDto;
 import com.leeej.board_bcrypt.dto.PostRequestDto;
 import com.leeej.board_bcrypt.dto.PostResponseDto;
+import com.leeej.board_bcrypt.dto.UserRequestDto;
 import com.leeej.board_bcrypt.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id, @Valid @RequestBody PostDeleteRequestDto dto) {
+    public void delete(@PathVariable Long id, @Valid @RequestBody UserRequestDto dto) {
         postService.delete(id, dto);
     }
 }

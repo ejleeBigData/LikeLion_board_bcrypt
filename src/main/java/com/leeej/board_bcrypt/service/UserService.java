@@ -17,7 +17,7 @@ public class UserService {
 
     public UserResponseDto register(UserRequestDto dto) {
         if(userRepository.findByUsername(dto.getUsername()).isPresent()) {
-            throw new RuntimeException("이미 등록된 회원.");
+            throw new RuntimeException("이미 등록된 회원입니다.");
         }
 
         String hash = BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt(10));
@@ -30,10 +30,10 @@ public class UserService {
 
     public User login(String username, String rawPassword) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(()-> new RuntimeException("없는 유저!"));
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저입니다."));
 
         if(!BCrypt.checkpw(rawPassword, user.getPasswordHash())) {
-            throw new RuntimeException("비밀번호 다름!");
+            throw new RuntimeException("비밀번호가 다릅니다.");
         }
 
         return user;
